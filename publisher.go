@@ -9,7 +9,7 @@ import (
 
 // EventPublisher is an application event publisher.
 type EventPublisher struct {
-	Config ServerConfig
+	Config Configuration
 	Server *machinery.Server
 	Errors []error
 }
@@ -23,7 +23,7 @@ func NewEventPublisher(settings map[string]string) *EventPublisher {
 	publisher.Config = GetConfiguration(settings)
 
 	// Attempting to start the event server
-	publisher.Server, err = machinery.NewServer(publisher.Config)
+	publisher.Server, err = machinery.NewServer(publisher.Config.ServerConfig)
 	publisher.processError(err)
 
 	return publisher
@@ -35,16 +35,17 @@ func (publisher *EventPublisher) Publish(name string, data interface{}) *EventPu
 	jsonData, err := json.Marshal(data)
 	publisher.processError(err)
 
-	// Preparing event data
-	event := &tasks.Signature{
-		RoutingKey: publisher.Config.DefaultQueue,
-		Name:       name,
-		Args:       []tasks.Arg{{Type: "string", Value: string(jsonData)}},
-	}
+	// Publishing the event for all the registered upstream queues
+	for _, queue := range publisher.Config.UpstreamQueues {
+		if queue != "" {
+			// Preparing event data
+			event := &tasks.Signature{RoutingKey: queue, Name: name, Args: []tasks.Arg{{Type: "string", Value: string(jsonData)}}}
 
-	// Attempting to trigger the event
-	_, err = publisher.Server.SendTask(event)
-	publisher.processError(err)
+			// Attempting to trigger the event
+			_, err = publisher.Server.SendTask(event)
+			publisher.processError(err)
+		}
+	}
 
 	return publisher
 }
