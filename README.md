@@ -1,7 +1,11 @@
 YohGo Evently
 ===
 
+[![Build Status](https://travis-ci.org/yohgo/evently.svg?branch=master)](https://travis-ci.org/yohgo/evently)
+
 YohGo Evently is a machinery based package that manages events asynchronously in an event-based architecture
+
+![Image of Yaktocat](img.png)
 
 ---------------------------------------
 
@@ -55,14 +59,13 @@ import (
 
 // A string map containing the event publisher's settings
 settings := map[string]string{
-    "source": "manual", // Can also be (environment|file)
-    "path": "path/to/the/yml/configuration/file", // (only when source = file)
-    "broker": "A url to a redis or AMQP broker", // (only when source = manual)
-	"default_queue": "The name of the default event queue", // (only when source = manual)
-	"result_backend": "A url to the backend result storage", // (only when source = manual)
-	"amqp_exchange": "An AMQP exchange", // (only when source = manual, and broker = AMQP)
-	"amqp_exchange": "An AMQP exchange type", // (only when source = manual, and broker = AMQP)
-	"amqp_exchange": "An AMQP binding key", // (only when source = manual, and broker = AMQP)
+    "broker"           : "A url to a redis or AMQP broker",
+    "downstream_queue" : "The default downstream event queue",
+    "upstream_queues"  : "A colon-separated list of upstream event queues",
+    "result_backend"   : "A url to the backend result storage",
+            "amqp_exchange" : "An AMQP exchange", // (only when broker = AMQP)
+            "amqp_exchange" : "An AMQP exchange type", // (only when broker = AMQP)
+            "amqp_exchange" : "An AMQP binding key", // (only when broker = AMQP)
 }
 
 // Creating a new event publisher
@@ -89,16 +92,14 @@ func eventHandler(JSONData string) error {
     /* Event handling logic */
 }
 
-// A string map containing the event listener's settings
 settings := map[string]string{
-    "source": "manual", // Can also be (environment|file)
-    "path": "path/to/the/yml/configuration/file", // (only when source = file)
-    "broker": "A url to a redis or AMQP broker", // (only when source = manual)
-	"default_queue": "The name of the default event queue", // (only when source = manual)
-	"result_backend": "A url to the backend result storage", // (only when source = manual)
-	"amqp_exchange": "An AMQP exchange", // (only when source = manual, and broker = AMQP)
-	"amqp_exchange": "An AMQP exchange type", // (only when source = manual, and broker = AMQP)
-	"amqp_exchange": "An AMQP binding key", // (only when source = manual, and broker = AMQP)
+    "broker"           : "A url to a redis or AMQP broker",
+    "downstream_queue" : "The default downstream event queue",
+    "upstream_queues"  : "A colon-separated list of upstream event queues",
+    "result_backend"   : "A url to the backend result storage",
+            "amqp_exchange" : "An AMQP exchange", // (only when broker = AMQP)
+            "amqp_exchange" : "An AMQP exchange type", // (only when broker = AMQP)
+            "amqp_exchange" : "An AMQP binding key", // (only when broker = AMQP)
 }
 
 // A map of event/handler pairs
@@ -116,3 +117,4 @@ if !listener.EventPublisher.Eavesdrop().IsOK() {
 ```
 
 For more details regarding event listener configuration check [`Machinery Documentation`](https://github.com/RichardKnop/machinery#configuration)
+
