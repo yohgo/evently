@@ -17,7 +17,7 @@ func NewEventListener(name string, settings map[string]string, handlers map[stri
 	var err error
 
 	// Attempting to start the event server
-	listener.Server, err = machinery.NewServer(GetConfiguration(settings))
+	listener.Server, err = machinery.NewServer(GetConfiguration(settings).ServerConfig)
 	listener.processError(err)
 
 	if listener.IsOK() {
