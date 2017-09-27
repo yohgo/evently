@@ -1,6 +1,8 @@
 YohGo Evently
 ===
 
+[![Build Status](https://travis-ci.org/yohgo/evently.svg?branch=master)](https://travis-ci.org/yohgo/evently)
+
 YohGo Evently is a machinery based package that manages events asynchronously in an event-based architecture
 
 ![Image of Yaktocat](img.png)
