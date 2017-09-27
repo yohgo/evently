@@ -10,15 +10,6 @@
 *.so
 *.dylib
 
-# Test binary, build with `go test -c`
-*.test
-
-# Output of go coverage
-*.out
-
-# Output of fresh
-tmp/*
-
 # Output of delve test debugger
 debug
 debug.test
